@@ -14,7 +14,7 @@
 
 ```
 git clone https://github.com/AbdulAhad-2005/hardhat-fund-me.git
-cd hardhat-fund-me-fcc
+cd hardhat-fund-me
 yarn
 ```
 
