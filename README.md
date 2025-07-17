@@ -38,17 +38,17 @@ This project is a decentralized application (DApp) that allows users to fund a s
 ### Clone This Monorepo
 
 ```bash
-git clone https://github.com/AbdulAhad-2005/fund-me-fullstack.git
-cd fund-me-fullstack
+git clone <your-repo-url>
+cd html-fund-me
 ```
 
 The directory structure will look like:
 
 ```
-fund-me-fullstack/
+html-fund-me/
 │
-├── frontend/        # html-fund-me
-└── backend/         # hardhat-fund-me
+├── frontend/        # frontend static files
+└── backend/         # hardhat contracts and scripts
 ```
 
 ---
@@ -57,13 +57,30 @@ fund-me-fullstack/
 
 ### Run Locally
 
+You can simply open `index.html` directly in your browser, or use VS Code's “Open with Live Server”.
+
+If you want to serve the frontend with a local server (optional):
+
 ```bash
+npm install -g http-server
 cd frontend
-yarn
-yarn http-server
+http-server
 ```
 
-Or simply open `index.html` directly in the browser, or use VS Code's “Open with Live Server”.
+### Required Files
+
+The frontend requires `constants.js` and `ethers-6.6.4.esm.min.js` in the `frontend/` directory. After deploying your contract, copy these files from `backend/` to `frontend/`:
+
+```bash
+cp ../backend/constants.js ./
+cp ../backend/ethers-6.6.4.esm.min.js ./
+```
+
+- Edit `frontend/constants.js` and set the correct contract address:
+
+```js
+export const contractAddress = "<YOUR_DEPLOYED_CONTRACT_ADDRESS>";
+```
 
 ### Connect MetaMask
 
@@ -74,7 +91,7 @@ Make sure your MetaMask is connected to:
 
 ### Fund Transaction
 
-1. Ensure the deployed contract address is added in `constants.js`
+1. Ensure the deployed contract address is set in `frontend/constants.js`
 2. Click **Connect Wallet**
 3. Enter an amount and click **Fund**
 
@@ -85,6 +102,24 @@ Make sure your MetaMask is connected to:
 ```bash
 cd backend
 yarn
+```
+
+### Environment Variables
+
+Create a `.env` file in the `backend/` directory. You can use the provided `.env.example` as a template:
+
+```bash
+cp .env.example .env
+```
+
+Fill in your values:
+
+```env
+PRIVATE_KEY=your_private_key
+SEPOLIA_RPC_URL=https://eth-sepolia.example
+ETHERSCAN_API_KEY=your_etherscan_key
+COINMARKETCAP_API_KEY=your_coinmarketcap_key
+CONTRACT_ADDRESS=your_deployed_contract_address
 ```
 
 ### Deploy Locally
@@ -101,15 +136,7 @@ yarn deploy          # Deploys to local network
 
 ### Deploy to Sepolia Testnet
 
-1. Add your environment variables to `.env`:
-
-```env
-PRIVATE_KEY=your_private_key
-SEPOLIA_RPC_URL=https://eth-sepolia.example
-ETHERSCAN_API_KEY=your_etherscan_key
-COINMARKETCAP_API_KEY=your_coinmarketcap_key
-```
-
+1. Add your environment variables to `.env` as shown above.
 2. Run:
 
 ```bash
@@ -141,7 +168,7 @@ Outputs `gas-report.txt` with estimates. To show cost in USD, add `COINMARKETCAP
 ## Verifying Contracts
 
 ```bash
-yarn hardhat verify --constructor-args arguments.js DEPLOYED_CONTRACT_ADDRESS
+yarn hardhat run utils/verify.js --network sepolia
 ```
 
 Requires `ETHERSCAN_API_KEY` in your `.env`.
@@ -153,11 +180,10 @@ Requires `ETHERSCAN_API_KEY` in your `.env`.
 ```bash
 yarn lint             # Check issues
 yarn lint:fix         # Auto-fix issues
-yarn format           # Format code
 ```
 
 ---
 
 ## Thank You
 
-Thanks for checking out this full stack blockchain project. If you encounter issues, feel free to raise them on [GitHub](https://github.com/AbdulAhad-2005).
+Thanks for checking out this full stack blockchain project. If you encounter issues, feel free to raise them on GitHub.
